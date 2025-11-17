@@ -9,7 +9,7 @@ def get_connection():
         host="db.qqfglpoopmnjvkdpylla.supabase.co",
         database="postgres",
         user="postgres",
-        password="YOUR_PASSWORD",  # Replace with your Supabase password
+        password="Testing9919!",  # Replace with your Supabase password
         port="5432",
         sslmode="require"
     )
