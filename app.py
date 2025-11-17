@@ -2,7 +2,7 @@ import streamlit as st
 import psycopg2
 from datetime import date
 
-# Database connection using Streamlit Secrets
+# Database connection using Streamlit Secrets new version
 def get_connection():
     return psycopg2.connect(
         host=st.secrets["DB_HOST"],
