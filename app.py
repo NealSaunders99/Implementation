@@ -1,7 +1,13 @@
 
+
 import streamlit as st
 import psycopg2
 from datetime import date
+import os
+from dotenv import load_dotenv
+
+# Load environment variables
+load_dotenv()
 
 # Database connection function
 def get_connection():
@@ -9,10 +15,11 @@ def get_connection():
         host="db.qqfglpoopmnjvkdpylla.supabase.co",
         database="postgres",
         user="postgres",
-        password="Testing9919!",  # Replace with your Supabase password
+        password=os.getenv("DB_PASSWORD"),  # Securely load from .env
         port="5432",
         sslmode="require"
     )
+
 
 st.title("StaxBill Implementation Tracker")
 
