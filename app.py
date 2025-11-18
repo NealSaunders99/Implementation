@@ -5,11 +5,11 @@ from datetime import date
 # Database connection using Streamlit Secrets
 def get_connection():
     return psycopg2.connect(
-        host=st.secrets["DB_HOST"],
-        database=st.secrets["DB_NAME"],
-        user=st.secrets["DB_USER"],
-        password=st.secrets["DB_PASSWORD"],
-        port=st.secrets["DB_PORT"],  # Use 5432 for pooler
+        host="aws-1-us-east-1.pooler.supabase.com",
+        database="postgres",
+        user="postgres.qqfglpoopmnjvkdpylla",
+        password="YZHEXV5HFJMOAKpM",
+        port="5432",
         sslmode="require"
     )
 
