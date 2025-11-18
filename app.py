@@ -20,17 +20,22 @@ app.add_middleware(
 DATABASE_URL = os.getenv("DATABASE_URL")
 
 # Parse DATABASE_URL for psycopg2
+
+DATABASE_URL = os.getenv("DATABASE_URL")
+
 def get_connection():
-    try:
-        result = urlparse(DATABASE_URL)
-        return psycopg2.connect(
-            host=result.hostname,
-            database=result.path[1:],  # remove leading '/'
-            user=result.username,
-            password=result.password,
-            port=result.port,
-            sslmode="require"
-        )
+    if not DATABASE_URL:
+        raise Exception("DATABASE_URL is not set in environment variables.")
+    result = urlparse(DATABASE_URL)
+    return psycopg2.connect(
+        host=result.hostname,
+        database=result.path[1:],  # remove leading '/'
+        user=result.username,
+        password=result.password,
+        port=result.port,
+        sslmode="require"
+    )
+
     except Exception as e:
         raise Exception(f"Database connection error: {e}")
 
