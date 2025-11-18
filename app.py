@@ -1,6 +1,8 @@
+import os
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 import psycopg2
+from urllib.parse import urlparse
 from datetime import date
 
 app = FastAPI()
@@ -14,16 +16,23 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# Database connection
+# Get database URL from environment variable
+DATABASE_URL = os.getenv("DATABASE_URL")
+
+# Parse DATABASE_URL for psycopg2
 def get_connection():
-    return psycopg2.connect(
-        host="aws-1-us-east-1.pooler.supabase.com",
-        database="postgres",
-        user="postgres.qqfglpoopmnjvkdpylla",
-        password="YZHEXV5HFJMOAKpM",
-        port="5432",
-        sslmode="require"
-    )
+    try:
+        result = urlparse(DATABASE_URL)
+        return psycopg2.connect(
+            host=result.hostname,
+            database=result.path[1:],  # remove leading '/'
+            user=result.username,
+            password=result.password,
+            port=result.port,
+            sslmode="require"
+        )
+    except Exception as e:
+        raise Exception(f"Database connection error: {e}")
 
 @app.get("/")
 async def root():
@@ -38,7 +47,6 @@ async def get_clients():
         cur.execute('SELECT ClientID, Name, StartDate, EndDate, GoLiveDate FROM "Clients";')
         rows = cur.fetchall()
         conn.close()
-        # Convert to list of dicts
         clients = [
             {"ClientID": r[0], "Name": r[1], "StartDate": str(r[2]), "EndDate": str(r[3]), "GoLiveDate": str(r[4])}
             for r in rows
